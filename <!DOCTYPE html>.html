@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yandex Tickets Widget</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .open-widget-btn {
+        background-color: #ffcc00;
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      .open-widget-btn:hover {
+        background-color: #e6b800;
+      }
+
+      #ya-widget-frame {
+        margin-top: 20px;
+      }
+
+      .widget-container {
+        display: none;
+      }
+
+      .widget-container.active {
+        display: block;
+      }
+
+      .warning {
+        background-color: #fff3cd;
+        border: 1px solid #ffc107;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="warning" id="httpsWarning" style="display: none">
+      ⚠️ <strong>Внимание!</strong> Виджет работает только по протоколу HTTPS.
+      Откройте страницу через HTTPS.
+    </div>
+
+    <h1>Покупка билетов</h1>
+    <button class="open-widget-btn" id="openWidgetBtn">
+      Открыть виджет покупки билетов
+    </button>
+
+    <div class="widget-container" id="widgetContainer">
+      <div id="ya-widget-frame"></div>
+    </div>
+
+    <script>
+      // Проверка HTTPS
+      if (window.location.protocol !== "https:") {
+        document.getElementById("httpsWarning").style.display = "block";
+        document.getElementById("openWidgetBtn").disabled = true;
+        document.getElementById("openWidgetBtn").style.opacity = "0.5";
+        document.getElementById("openWidgetBtn").style.cursor = "not-allowed";
+      }
+
+      /* Настройка */
+      var dealerName = "YandexTicketsDealer";
+      var dealer = (window[dealerName] = window[dealerName] || []);
+
+      dealer.push([
+        "setDefaultClientKey",
+        "ecfe61a7-e8c0-4fb0-a86b-eafe1e2d84c4",
+      ]);
+      dealer.push(["setDefaultRegionId", 213]);
+
+      let widgetInstance = null;
+
+      // Функция для открытия виджета
+      function openWidget() {
+        const widgetContainer = document.getElementById("widgetContainer");
+        widgetContainer.classList.add("active");
+
+        if (!widgetInstance) {
+          YandexTicketsDealer.push([
+            "getDealer",
+            function (dealer) {
+              widgetInstance = dealer.Widget("379465", "event", {
+                target: document.getElementById("ya-widget-frame"),
+                onRequestClose: function () {
+                  closeWidget();
+                },
+              });
+
+              widgetInstance.mount({ style: { height: "600px" } });
+            },
+          ]);
+        }
+      }
+
+      // Функция для закрытия виджета
+      function closeWidget() {
+        const widgetContainer = document.getElementById("widgetContainer");
+        widgetContainer.classList.remove("active");
+
+        if (widgetInstance) {
+          widgetInstance.unmount();
+          widgetInstance.destroy();
+          widgetInstance = null;
+        }
+      }
+
+      // Обработчик клика на кнопку
+      document
+        .getElementById("openWidgetBtn")
+        .addEventListener("click", openWidget);
+
+      /* Загрузка */
+      (function () {
+        var rnd = "?" + new Date().getTime() * Math.random();
+        var script = document.createElement("script");
+        var target = document.getElementsByTagName("script")[0];
+        script.async = true;
+        script.src =
+          "https://widget-pr-11365076.beta.pr.afisha.tst.yandex.ru/dealer/dealer.js" +
+          rnd;
+        target.parentNode.insertBefore(script, target);
+      })();
+    </script>
+  </body>
+</html>

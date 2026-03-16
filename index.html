@@ -79,7 +79,7 @@
 
       dealer.push([
         "setDefaultClientKey",
-        "28c6fee6-7df6-4eb2-b00f-0acaf0302e08",
+        "62bd0c4c-dc35-40e6-9a3e-d3a3ce68a11d",
       ]);
       dealer.push(["setDefaultRegionId", 213]);
 
@@ -94,7 +94,7 @@
           YandexTicketsDealer.push([
             "getDealer",
             function (dealer) {
-              widgetInstance = dealer.Widget("430775", "event", {
+              widgetInstance = dealer.Widget("283174", "event", {
                 target: document.getElementById("ya-widget-frame"),
                 onRequestClose: function () {
                   closeWidget();
@@ -131,7 +131,7 @@
         var target = document.getElementsByTagName("script")[0];
         script.async = true;
         script.src =
-          "https://widget.afisha.prestable.yandex.ru/dealer/dealer.js" +
+          "https://widget-pr-12164824.beta.pr.afisha.tst.yandex.ru/dealer/dealer.js" +
           rnd;
         target.parentNode.insertBefore(script, target);
       })();
